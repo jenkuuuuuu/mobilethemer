@@ -1,0 +1,103 @@
+{
+  "name": "Custom Theme",
+  "description": "Made with themer.jenku.xyz",
+  "authors": [
+    {
+      "name": "None inputted",
+      "id": "None inputted"
+    }
+  ],
+  "semanticColors": {
+    "SECONDARY_FOCUSED_BACKGROUND": [
+      "#000000"
+    ],
+    "PRIMARY_FOCUSED_BACKGROUND": [
+      "#000000"
+    ],
+    "SELECTION_PICKER_BG": [
+      "#000000"
+    ],
+    "EXPRESSION_PICKER_BG": [
+      "#1c1d22"
+    ],
+    "TEXT_NORMAL": [
+      "#e4e5e9"
+    ],
+    "TEXT_PRIMARY": [
+      "#c7c8cd"
+    ],
+    "TEXT_MUTED": [
+      "#7c7e8a"
+    ],
+    "INTERACTIVE_ACTIVE": [
+      "#f3f3f3"
+    ],
+    "INTERACTIVE_NORMAL": [
+      "#787b82"
+    ],
+    "BACKGROUND_PRIMARY": [
+      "#1c1d22"
+    ],
+    "BACKGROUND_SECONDARY": [
+      "#272731"
+    ],
+    "BACKGROUND_SECONDARY_ALT": [
+      "#141318"
+    ],
+    "BACKGROUND_TERTIARY": [
+      "#141318"
+    ],
+    "BG_BASE_PRIMARY": [
+      "#1c1d22"
+    ],
+    "BACKGROUND_MODIFIER_ACTIVE": [
+      "#b99c59"
+    ],
+    "BACKGROUND_MODIFIER_ACCENT": [
+      "#26262e"
+    ],
+    "BACKGROUND_FLOATING": [
+      "#2d2d35"
+    ],
+    "TEXT_SECONDARY": [
+      "#7c7e8a"
+    ],
+    "CARD_PRIMARY_BG": [
+      "#27272f"
+    ],
+    "CARD_SECONDARY_BG": [
+      "#27272f"
+    ],
+    "CHANNEL_ICON": [
+      "#818592"
+    ],
+    "BG-BRAND": [
+      "#5865f2"
+    ],
+    "REDESIGN_BUTTON_SECONDARY_BACKGROUND": [
+      "#373a43"
+    ],
+    "REDESIGN_BUTTON_SECONDARY_BORDER": [
+      "#3d3d47"
+    ],
+    "PANEL_BG": [
+      "#1c1d22"
+    ],
+    "REDESIGN_CHANNEL_CATEGORY_NAME_TEXT": [
+      "#9597a3"
+    ],
+    "REDESIGN_CHANNEL_NAME_TEXT": [
+      "#e4e5e7"
+    ],
+    "REDESIGN_CHAT_INPUT_BACKGROUND": [
+      "#26262e"
+    ],
+    "EMBED_BACKGROUND": [
+      "#27272f"
+    ]
+  },
+  "rawColors": {
+    "PLUM_20": "#1c1d22"
+  },
+  "spec": 2
+}

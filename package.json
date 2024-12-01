@@ -1,0 +1,35 @@
+{
+	"name": "vendetbunnyrevengethemer",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/adapter-cloudflare": "^4.7.2",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"svelte": "^4.2.7",
+		"vite": "^5.0.3"
+	},
+	"type": "module",
+	"dependencies": {
+		"@fortawesome/fontawesome-free": "^6.6.0",
+		"@fortawesome/free-solid-svg-icons": "^6.6.0",
+		"@fortawesome/svelte-fontawesome": "^0.2.2",
+		"@melloware/coloris": "^0.24.0",
+		"@simonwep/pickr": "^1.9.1",
+		"coloris": "^0.1.0",
+		"jquery": "^3.7.1",
+		"spectrum-colorpicker": "^1.8.1",
+		"svelte-awesome-color-picker": "^3.1.4",
+		"svelte-color-picker": "^1.0.7",
+		"svelte-fontawesome": "^0.0.3",
+		"svelte-portal": "^2.2.1",
+		"swiper": "^11.1.14",
+		"vanilla-picker": "^2.12.3"
+	}
+}
