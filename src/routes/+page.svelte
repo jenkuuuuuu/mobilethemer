@@ -1,129 +1,98 @@
 <script>
-    import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
-    import { faArrowLeft, faBell, faGear, faHashtag, faCity, faUser, faMagnifyingGlass, faCircle, faSquare, faFaceSmile, faGift, faPlus, faMicrophone, faChevronRight, faChevronDown, faComment, faFolder, faUserPlus, faList } from '@fortawesome/free-solid-svg-icons'
-    import '@fortawesome/fontawesome-free/css/all.min.css'
-    import "./app.css";
-    import ColorPicker from './colorPicker.svelte';
-    import ColorGrid from './colorGrid.svelte';
-    import { onMount } from 'svelte';
-    let circles = [1, 2, 3, 4, 5, 6, 7];
+  import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome';
+  import {
+      faArrowLeft, faBell, faGear, faHashtag, faCity, faUser,
+      faMagnifyingGlass, faCircle, faSquare, faFaceSmile, faGift,
+      faPlus, faMicrophone, faChevronRight, faChevronDown,
+      faComment, faFolder, faUserPlus, faList
+  } from '@fortawesome/free-solid-svg-icons';
 
-    let activeChildIndex = 0;
+  import '@fortawesome/fontawesome-free/css/all.min.css';
+  import './app.css';
+  import ColorPicker from './colorPicker.svelte';
+  import ColorGrid from './colorGrid.svelte';
+  import { onMount } from 'svelte';
 
-    function changeChild(index) {
-        if (index >= 0 && index < 3) { 
-            activeChildIndex = index;
-        }
-    }
+  let circles = Array(7).fill(); // Simplified circle array
+  let activeChildIndex = 0;
+  let colorPickerRef;
 
-    let colorPickerRef; 
+  function changeChild(index) {
+      if (index >= 0 && index < 3) activeChildIndex = index;
+  }
 
-    function restoreDef() {
-        if (colorPickerRef) {
-            colorPickerRef.restoreDefaults();
-        }
-    }
-    function importTheme() {
-        if (colorPickerRef) {
-            colorPickerRef.importTheme();
-        }
-    }
+  function restoreDefaults() {
+      colorPickerRef?.restoreDefaults();
+  }
 
-    let startX;
-    let endX;
+  function importTheme() {
+      colorPickerRef?.importTheme();
+  }
 
-    const handleTouchStart = (event) => {
-        startX = event.touches[0].clientX; 
-    };
-
-    const handleTouchMove = (event) => {
-        endX = event.touches[0].clientX;
-    };
-
-    const handleTouchEnd = () => {
-        const threshold = 50; 
-        if (startX - endX > threshold) {
-            changeChild(activeChildIndex + 1);
-        } else if (endX - startX > threshold) {
-            changeChild(activeChildIndex - 1);
-        }
-    };
-    
   function getCSSVariables() {
       const styles = getComputedStyle(document.documentElement);
-      const cssVariables = colorPickerRef.getColors();
-    
-      for (let i = 0; i < styles.length; i++) {
-        const name = styles[i];
-        console.log(name)
-        if (name.startsWith('--')) {
-          cssVariables[name.replace('--', '')] = styles.getPropertyValue(name).trim();
-        }
-      }
-      return cssVariables;
-    }
-
-    function downloadTheme(json, filename="theme.json"){
-    const blob = new Blob([json], { type: 'application/json' });
-
-      const url= URL.createObjectURL(blob)
-
+      const cssVariables = colorPickerRef?.getColors() || {};
       
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
+      Array.from(styles).forEach((name) => {
+          if (name.startsWith('--') && !name.startsWith('--fa')) {
+              cssVariables[name.replace('--', '')] = styles.getPropertyValue(name).trim();
+          }
+      });
 
-    URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-    }
-  
-export function exportVars() {
-        const semanticColors = getCSSVariables();
+      return cssVariables;
+  }
 
-  // Fetch user-provided data or default values
-  const themeName = document.getElementById("themename")?.value || "Custom Theme";
-  const username = document.getElementById("username")?.value || "None inputted";
-  const userId = document.getElementById("userid")?.value || "None inputted";
+  function downloadTheme(json, filename = 'theme.json') {
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
 
-  // Construct the JSON object
-  const json = {
-    name: themeName,
-    description: "Made with themer.jenku.xyz",
-    authors: [
-      {
-        name: username,
-        id: userId,
-      },
-    ],
-    semanticColors,
-    rawColors: {}, // Add rawColors if necessary
-    spec: 2,
+      anchor.href = url;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+  }
+
+  export function exportVars() {
+      const semanticColors = getCSSVariables();
+      const themeName = document.getElementById('themename')?.value || 'Custom Theme';
+      const username = document.getElementById('username')?.value || 'None inputted';
+      const userId = document.getElementById('userid')?.value || 'None inputted';
+
+      const themeData = JSON.stringify({
+          name: themeName,
+          description: 'Made with theme.jenku.xyz',
+          authors: [{ name: username, id: userId }],
+          semanticColors,
+          rawColors: {},
+          spec: 2
+      }, null, 2);
+
+      console.log(themeData);
+      downloadTheme(themeData);
+  }
+
+  let startX, endX;
+
+  const handleTouchStart = (e) => startX = e.touches[0].clientX;
+  const handleTouchMove = (e) => endX = e.touches[0].clientX;
+  const handleTouchEnd = () => {
+      const threshold = 50;
+      if (startX - endX > threshold) changeChild(activeChildIndex + 1);
+      else if (endX - startX > threshold) changeChild(activeChildIndex - 1);
   };
 
-  // Convert JSON to a string and download
-  console.log(JSON.stringify(json, null, 2)); // Log the JSON for debugging
-  downloadTheme(JSON.stringify(json, null, 2));
-}
-
-
-    onMount(() =>{
-    window.onresize = function() {
-      let zoom = Math.round(window.devicePixelRatio * 100);
-    if (zoom > 100) {
-        var message = document.getElementById("zoomMsg");
-        message.style.display = "block"; 
-    } else{
-            var message = document.getElementById("zoomMsg");
-            message.style.display = "none";
-        }
-    };
-      
-    })
-
-
-  </script><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  onMount(() => {
+      window.onresize = () => {
+          const zoom = Math.round(window.devicePixelRatio * 100);
+          const message = document.getElementById('zoomMsg');
+          if (message) message.style.display = zoom > 100 ? 'block' : 'none';
+      };
+  });
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <div class="grid" on:touchstart={handleTouchStart} on:touchmove={handleTouchMove} on:touchend={handleTouchEnd}>
     <div class="child serverlist" class:active={activeChildIndex === 0}>
@@ -406,7 +375,7 @@ export function exportVars() {
       <input type="text" id="userid" placeholder="userid">
 
       <button on:click={() => exportVars()}> Export </button>
-      <button class="reset-button" on:click={() => restoreDef()}>Restore Default Colors</button>
+      <button class="reset-button" on:click={() => restoreDefaults()}>Restore Default Colors</button>
       <button class="reset-button" on:click={() => importTheme()}>Import Theme</button>
     </div>
     <ColorPicker bind:this={colorPickerRef} />
