@@ -99,6 +99,8 @@ onMount(async () => {
   const savedColors = getSavedColors();
   if (savedColors) {
     colors = { ...colors, ...savedColors };
+  } else{
+    restoreDefaults();
   }
 
   Object.keys(colors).forEach(variable => applyColor(variable, colors[variable]));
