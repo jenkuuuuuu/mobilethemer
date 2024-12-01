@@ -49,6 +49,16 @@
     saveColorsToLocalStorage();
   }
 
+  export function getColors() {
+  const semanticColors = {};
+
+  Object.entries(colors).forEach(([variable, color]) => {
+    const variableName = variable.replace('--', '').toUpperCase();
+    semanticColors[variableName] = [color];
+  });
+
+  return semanticColors;
+}
 
   export function restoreDefaults() {
         const json = defaultTheme;

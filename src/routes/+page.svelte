@@ -51,10 +51,11 @@
     
   function getCSSVariables() {
       const styles = getComputedStyle(document.documentElement);
-      const cssVariables = {};
+      const cssVariables = colorPickerRef.getColors();
     
       for (let i = 0; i < styles.length; i++) {
         const name = styles[i];
+        console.log(name)
         if (name.startsWith('--')) {
           cssVariables[name.replace('--', '')] = styles.getPropertyValue(name).trim();
         }
@@ -79,72 +80,32 @@
     }
   
 export function exportVars() {
-      const variables = getCSSVariables();
-      
-      if (document.getElementById("themename").value){
-        var themeName = document.getElementById("themename").value
-      }  else{
-        var themeName = "Custom Theme"
-      }
-      
-      if (document.getElementById("username").value){
-        var username = document.getElementById("username").value
-      }  else{
-        var username = "None inputted"
-      }
-      
-      if (document.getElementById("userid").value){
-        var userId = document.getElementById("userid").value
-      }  else{
-        var userId = "None inputted"
-      }
+        const semanticColors = getCSSVariables();
 
+  // Fetch user-provided data or default values
+  const themeName = document.getElementById("themename")?.value || "Custom Theme";
+  const username = document.getElementById("username")?.value || "None inputted";
+  const userId = document.getElementById("userid")?.value || "None inputted";
 
+  // Construct the JSON object
+  const json = {
+    name: themeName,
+    description: "Made with themer.jenku.xyz",
+    authors: [
+      {
+        name: username,
+        id: userId,
+      },
+    ],
+    semanticColors,
+    rawColors: {}, // Add rawColors if necessary
+    spec: 2,
+  };
 
-      const json = {
-        "name": themeName,
-        "description": "Made with themer.jenku.xyz",
-        "authors": [
-          {
-            "name": username,
-            "id": userId
-          }
-        ],
-        "semanticColors": {},
-        "rawColors": {},
-        "spec": 2
-      };
-      for (const [key, value] of Object.entries(variables)) {
-        const rgbaMatch = value.match(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d*))?\)/);
-  
-        if (rgbaMatch) {
-          const r = parseInt(rgbaMatch[1]);
-          const g = parseInt(rgbaMatch[2]);
-          const b = parseInt(rgbaMatch[3]);
-
-          const toHex = (c) => {
-            const hex = c.toString(16).padStart(2, '0');
-            return hex;
-          };
-          
-          const hexColor = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-
-          switch (key.toUpperCase()) {
-            case "BG_BASE_PRIMARY":
-              json.rawColors["PLUM_20"] = hexColor;
-            case 'BACKGROUND_SECONDARY_ALT':
-              json.semanticColors["EXPRESSION_PICKER_BG"] = [hexColor];
-          }
-
-          
-          json.semanticColors[key.toUpperCase()] = [hexColor];
-        }
+  // Convert JSON to a string and download
+  console.log(JSON.stringify(json, null, 2)); // Log the JSON for debugging
+  downloadTheme(JSON.stringify(json, null, 2));
 }
-
-  
-      console.log(JSON.stringify(json, null, 2));
-      downloadTheme(JSON.stringify(json, null, 2))
-    }
 
 
     onMount(() =>{
