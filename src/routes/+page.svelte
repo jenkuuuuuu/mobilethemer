@@ -42,7 +42,7 @@ const cssVariables = {};
       return cssVariables;
   }
 
-  function downloadTheme(json, filename = 'theme.json') {
+  function downloadTheme(json, filename) {
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement('a');
@@ -112,8 +112,87 @@ export function exportVars() {
 }
   
       console.log(JSON.stringify(json, null, 2));
-      downloadTheme(JSON.stringify(json, null, 2))
+      downloadTheme(JSON.stringify(json, null, 2), "theme.json")
     }
+
+  export function exportUnbound() {
+    const variables = getCSSVariables();
+
+    if (document.getElementById("themename").value) {
+      var themeName = document.getElementById("themename").value;
+    } else {
+      var themeName = "Custom Theme";
+    }
+
+    if (document.getElementById("username").value) {
+      var username = document.getElementById("username").value;
+    } else {
+      var username = "None inputted";
+    }
+
+    if (document.getElementById("userid").value) {
+      var userId = document.getElementById("userid").value;
+    } else {
+      var userId = "None inputted";
+    }
+
+    const manifest = {
+      name: themeName,
+      id: `jenksite.${themeName}`,
+      type: "theme",
+      main: "bundle.json",
+      description: "Made with theme.jenku.xyz",
+      version: "1.0.0",
+      authors: [
+        {
+          name: username,
+          id: userId,
+        },
+      ]
+    };
+    const json = {
+      semantic: {},
+      raw: {},
+      type: "dark"
+    }
+    for (const [key, value] of Object.entries(variables)) {
+      const rgbaMatch = value.match(
+        /rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d*))?\)/,
+      );
+
+      if (rgbaMatch) {
+        const r = parseInt(rgbaMatch[1]);
+        const g = parseInt(rgbaMatch[2]);
+        const b = parseInt(rgbaMatch[3]);
+
+        const toHex = (c) => {
+          const hex = c.toString(16).padStart(2, "0");
+          return hex;
+        };
+
+        const hexColor = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+
+        switch (key.toUpperCase()) {
+          case "BG_BASE_PRIMARY":
+            json.raw["PLUM_20"] = hexColor;
+          case "BACKGROUND_SECONDARY_ALT":
+            json.semantic["EXPRESSION_PICKER_BG"] = {};
+            json.semantic["EXPRESSION_PICKER_BG"].type = "color";
+            json.semantic["EXPRESSION_PICKER_BG"].color = hexColor;
+        }
+
+        
+
+        json.semantic[key.toUpperCase()] = {};
+        json.semantic[key.toUpperCase()].type = "color";
+        json.semantic[key.toUpperCase()].value = hexColor;
+      }
+    }
+
+    console.log(JSON.stringify(json, null, 2));
+    downloadTheme(JSON.stringify(manifest,null,2), "manifest.json")
+    downloadTheme(JSON.stringify(json, null, 2), "bundle.json");
+  }
   let startX, endX;
 
   const handleTouchStart = (e) => startX = e.touches[0].clientX;
@@ -414,7 +493,8 @@ export function exportVars() {
       <input type="text" id="username" placeholder="username">
       <input type="text" id="userid" placeholder="userid">
 
-      <button on:click={() => exportVars()}> Export </button>
+      <button on:click={() => exportVars()}> Export for Vendetta-based/Enmity </button>
+      <button on:click={() => exportVars()}> Export for Unbound</button>
       <button class="reset-button" on:click={() => restoreDefaults()}>Restore Default Colors</button>
       <button class="reset-button" on:click={() => importTheme()}>Import Theme</button>
     </div>
