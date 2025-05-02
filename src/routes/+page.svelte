@@ -76,7 +76,7 @@ export function exportVars() {
       }
       const json = {
         "name": themeName,
-        "description": "Made with themer.jenku.xyz",
+        "description": "Made with theme.jenku.xyz",
         "authors": [
           {
             "name": username,
